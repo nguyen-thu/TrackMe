@@ -93,42 +93,7 @@ public class LocationMonitoringService extends Service implements
             }
         });
         locationClient.connect();
-        // Check whether location settings are satisfied
-        // https://developers.google.com/android/reference/com/google/android/gms/location/SettingsClient
-//        SettingsClient settingsClient = LocationServices.getSettingsClient(this);
-//        Task<LocationSettingsResponse> result = settingsClient
-//                .checkLocationSettings(locationSettingsRequest);
-//        result.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
-//            @SuppressLint("MissingPermission")
-//            @Override
-//            public void onComplete(@NonNull Task<LocationSettingsResponse> task) {
-//                try {
-//                    LocationSettingsResponse response =
-//                            task.getResult(ApiException.class);
-//                } catch (ApiException ex) {
-//                    switch (ex.getStatusCode()) {
-//                        case LocationSettingsStatusCodes.SUCCESS:
-//                            fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null);
-//
-//                            break;
-//                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-//                            ResolvableApiException resolvableApiException =
-//                                    (ResolvableApiException) ex;
-//                            new Handler(Looper.getMainLooper()).post(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    EventBus.getDefault().post(resolvableApiException);
-//                                }
-//                            });
-//
-//                            break;
-//                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-//
-//                            break;
-//                    }
-//                }
-//            }
-//        });
+
         //Make it stick to the notification panel so it is less prone to get cancelled by the Operating System.
         return START_STICKY;
     }
@@ -136,6 +101,7 @@ public class LocationMonitoringService extends Service implements
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.d("LocationMonitoringServ", "Service Destroyed");
         // Also stop update location listener and disconnect
         if(fusedLocationProviderClient != null && locationClient != null){
             fusedLocationProviderClient.removeLocationUpdates(locationCallback);

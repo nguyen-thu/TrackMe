@@ -103,10 +103,12 @@ public class TrackingWorkoutActivity extends BaseActivity
         super.onResume();
         isVisibleToUser = true;
 
-        // Update UI if has changed on background
-        if(trackingWorkoutHelper != null && trackingWorkoutHelper.hasData() && !trackingWorkoutHelper.isNotifyToUI()){
-            updateLatestDuration(trackingWorkoutHelper.getPendingWorkoutItemData().duration);
-            updateLatestLocation(trackingWorkoutHelper.getPendingWorkoutItemData(), true);
+        if(pendingWorkoutItemData == null) {
+            // Update UI if has changed on background
+            if (trackingWorkoutHelper != null && trackingWorkoutHelper.hasData() && !trackingWorkoutHelper.isNotifyToUI()) {
+                updateLatestDuration(trackingWorkoutHelper.getPendingWorkoutItemData().duration);
+                updateLatestLocation(trackingWorkoutHelper.getPendingWorkoutItemData(), true);
+            }
         }
     }
 
@@ -114,6 +116,9 @@ public class TrackingWorkoutActivity extends BaseActivity
     protected void onPause() {
         super.onPause();
         isVisibleToUser = false;
+
+        // Store pending workout if any
+        EventBus.getDefault().post(true);
     }
 
     @Override
@@ -188,11 +193,15 @@ public class TrackingWorkoutActivity extends BaseActivity
         if(pendingWorkoutItemData == null) {
             startService(new Intent(this, LocationMonitoringService.class));
         }else{
+            pendingWorkoutItemData.reinitLocationInfo();
+
             // Update UI for the last pending item
             updateLatestLocation(pendingWorkoutItemData, true);
             updateLatestDuration(pendingWorkoutItemData.duration);
 
-            if(pendingWorkoutItemData.state != null && pendingWorkoutItemData.state != AppConstant.WORKOUT_STATE.PAUSE){
+            if(AppConstant.WORKOUT_STATE.PAUSE == pendingWorkoutItemData.state){
+                processPause();
+            }else{ // Otherwise playing
                 startService(new Intent(this, LocationMonitoringService.class));
             }
             // Release pending start for the first time

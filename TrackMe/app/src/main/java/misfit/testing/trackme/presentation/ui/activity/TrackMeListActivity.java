@@ -72,6 +72,7 @@ public class TrackMeListActivity extends BaseActivity
     protected void onDestroy() {
         super.onDestroy();
         presenter.destroy();
+        pendingPresenter.destroy();
     }
 
     @Override

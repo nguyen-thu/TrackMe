@@ -104,7 +104,9 @@ public class PendingWorkoutItemData extends WorkoutItemData implements Parcelabl
     public boolean isInit(){
         return currentLocation == lastLocation;
     }
-
+    public boolean isInitFromResume(){
+        return isInit() || (currentLocation.equals(lastLocation));
+    }
     public LatLng getLastLocation() {
         return lastLocation;
     }
@@ -112,7 +114,12 @@ public class PendingWorkoutItemData extends WorkoutItemData implements Parcelabl
     public LatLng getCurrentLocation() {
         return currentLocation;
     }
-
+    public void reinitLocationInfo(){
+        if(trackingLocationList != null && trackingLocationList.size() > 0){
+            lastLocation = trackingLocationList.get(trackingLocationList.size() - 1);
+            currentLocation = new LatLng(lastLocation.latitude, lastLocation.longitude);
+        }
+    }
     @Override
     public void addNewLocation(LatLng latLng) {
         super.addNewLocation(latLng);

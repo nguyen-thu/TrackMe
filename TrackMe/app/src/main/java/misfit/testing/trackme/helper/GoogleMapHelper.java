@@ -63,24 +63,24 @@ public class GoogleMapHelper {
         Marker marker = googleMap.addMarker(markerOption);
         return marker;
     }
-    public void drawWorkout(WorkoutItemData workoutItemData){
+    public void drawWorkout(WorkoutItemData workoutItemData, boolean isPendingWorkout){
         googleMap.clear();
 
         Polyline polyline = googleMap.addPolyline(new PolylineOptions()
                 .addAll(workoutItemData.trackingLocationList));
-        stylePolyline(polyline, true, true);
+        stylePolyline(polyline, true, !isPendingWorkout);
 
         LatLng center = workoutItemData.getAnchorPoint();
         if(center != null){
             moveToLocationWithZoomInit(center.latitude, center.longitude, workoutItemData.getRadius());
         }
     }
-    public void drawPendingWorkout(WorkoutItemData workoutItemData){
-        googleMap.clear();
+    public void drawWorkout(WorkoutItemData workoutItemData){
+        drawWorkout(workoutItemData, false);
+    }
 
-        Polyline polyline = googleMap.addPolyline(new PolylineOptions()
-                .addAll(workoutItemData.trackingLocationList));
-        stylePolyline(polyline, true, false);
+    public void drawPendingWorkout(WorkoutItemData workoutItemData){
+        drawWorkout(workoutItemData, true);
     }
     public void drawRealtimeWorkout(PendingWorkoutItemData pendingWorkoutItemData){
         if(pendingWorkoutItemData.isInit()){

@@ -39,6 +39,7 @@ public class TrackingWorkoutHelper implements IWorkoutPresenter.View, IPendingWo
 
     PendingWorkoutItemData pendingWorkoutItemData;
     boolean isNotifyToUI;
+    boolean isInit = true;
 
     public TrackingWorkoutHelper(){
         init();
@@ -137,7 +138,8 @@ public class TrackingWorkoutHelper implements IWorkoutPresenter.View, IPendingWo
 
         pendingWorkoutItemData.currentSpeed = location.getSpeed();
         pendingWorkoutItemData.addNewLocation(new LatLng(location.getLatitude(), location.getLongitude()));
-        if(pendingWorkoutItemData.getDuration() == 0){ // First time of tracking
+        if(isInit){ // First time of tracking
+            isInit = false;
             beginTracking();
         }else if(pendingWorkoutItemData.state == AppConstant.WORKOUT_STATE.PAUSE){
             refreshTracking();
@@ -149,11 +151,11 @@ public class TrackingWorkoutHelper implements IWorkoutPresenter.View, IPendingWo
         }
     }
     @Subscribe
-    public void receiveClearAppFromRecent(Boolean forceStop){
+    public void storePendingWorkItem(Boolean forceStop){
         if(pendingWorkoutItemData != null &&
                 pendingWorkoutItemData.state != AppConstant.WORKOUT_STATE.NONE && pendingWorkoutItemData.trackingLocationList.size() > 0){
-            // Store to db
-            pendingPresenter.addPendingWorkoutItem(pendingWorkoutItemData);
+                // Store to db
+                pendingPresenter.addPendingWorkoutItem(pendingWorkoutItemData);
         }
     }
     /*************** Process receive data from event bus E*******************************/

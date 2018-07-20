@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
-import org.greenrobot.eventbus.EventBus;
-
 /**
  * Created by Thu Nguyen on 7/20/2018.
  */
@@ -34,6 +32,7 @@ public class OnClearFromRecentService extends Service {
     public void onTaskRemoved(Intent rootIntent) {
         Log.e("ClearFromRecentService", "END");
         //Code here
-        EventBus.getDefault().post(true);
+        //EventBus.getDefault().post(true);
+        stopService(new Intent(this, LocationMonitoringService.class));
     }
 }
