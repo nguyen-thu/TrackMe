@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">TrackMe</string>
+    
+    <string name="distance_text">Distance</string>
+    <string name="average_speed_text">Avg. Speed</string>
+    <string name="speed_text">Speed</string>
+    <string name="workout_session_empty_error">No workout session found.</string>
+    <string name="workout_session_out_confirm">Would you like to stop this session?</string>
+    <string name="play_service_not_found_error">This device don\'t have google play service.\nPlease install it or try later.</string>
+</resources>
